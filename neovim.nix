@@ -17,6 +17,7 @@
   nixfmt-rfc-style,
   metals,
   cmake-language-server,
+  stylua,
 }:
 
 let
@@ -25,6 +26,7 @@ let
     vim-language-server
     vscode-langservers-extracted
     nodePackages.typescript-language-server
+    nodePackages.prettier
     dockerfile-language-server-nodejs
     pyright
     gopls
@@ -34,6 +36,7 @@ let
     metals
     cmake-language-server
     clang-tools
+    stylua
   ];
   _vimPlugins = with vimPlugins; [
     plenary-nvim
@@ -73,13 +76,19 @@ let
     nvim-dap-ui
     nvim-dap-virtual-text
     nvim-dap-python
+    conform-nvim
     rustaceanvim
   ];
+  # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
+  unescapeLua = (s: '']]${s},--[['');
   subsitutedInitLua = replaceVars ./init.lua {
+    prettierPath = lib.pipe nodePackages.prettier [
+      (s: ''command = "${s}/bin/prettier"'')
+      unescapeLua
+    ];
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
-      # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
-      (s: '']]${s},--[['')
+      unescapeLua
     ];
   };
 in

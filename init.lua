@@ -192,6 +192,11 @@ require("typescript-tools").setup({
 		-- https://github.com/pmizio/typescript-tools.nvim/pull/67/files#diff-a51f0845ed52f1844d37953402f96d8e402fe3c480d06d94df209c6d78c3d8e3R129
 		tsserver_max_memory = 32768,
 	},
+	on_attach = function(client)
+		-- using prettier to format
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
+	end,
 })
 
 -- lspkind-nvim
@@ -409,6 +414,22 @@ require("dapui").setup({
 -- nvim-dap-python
 require("dap-python").setup()
 
+-- conform-nvim
+require("conform").setup({
+	formatters = {
+		prettier = {
+			--[[@prettierPath@]]
+		},
+	},
+	formatters_by_ft = {
+		javascript = { "prettier" },
+		javascriptreact = { "prettier" },
+		typescript = { "prettier" },
+		typescriptreact = { "prettier" },
+		lua = { "stylua" },
+	},
+})
+
 --
 -- lspconfig
 --
@@ -419,8 +440,8 @@ vim.lsp.config("lua_ls", {
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
 			if
-					path ~= vim.fn.stdpath("config")
-					and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+				path ~= vim.fn.stdpath("config")
+				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
 			then
 				return
 			end
@@ -446,6 +467,11 @@ vim.lsp.config("lua_ls", {
 				-- library = vim.api.nvim_get_runtime_file("", true)
 			},
 		})
+	end,
+	on_attach = function(client, bufnr)
+		-- use stylua
+		client.server_capabilities.documentFormattingProvider = false
+		client.server_capabilities.documentRangeFormattingProvider = false
 	end,
 	settings = {
 		Lua = {},
@@ -591,7 +617,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		)
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "<leader>p", function()
-			vim.lsp.buf.format({ async = true })
+			if client ~= nil and client.server_capabilities.documentFormattingProvider then
+				vim.lsp.buf.format({ async = true })
+			else
+				require("conform").format()
+			end
 		end, opts)
 	end,
 })
