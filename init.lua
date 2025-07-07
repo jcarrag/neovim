@@ -416,11 +416,6 @@ require("dap-python").setup()
 
 -- conform-nvim
 require("conform").setup({
-	formatters = {
-		prettier = {
-			--[[@prettierPath@]]
-		},
-	},
 	formatters_by_ft = {
 		javascript = { "prettier" },
 		javascriptreact = { "prettier" },

@@ -79,16 +79,11 @@ let
     conform-nvim
     rustaceanvim
   ];
-  # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
-  unescapeLua = (s: '']]${s},--[['');
   subsitutedInitLua = replaceVars ./init.lua {
-    prettierPath = lib.pipe nodePackages.prettier [
-      (s: ''command = "${s}/bin/prettier"'')
-      unescapeLua
-    ];
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
-      unescapeLua
+      # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
+      (s: '']]${s},--[['')
     ];
   };
 in
