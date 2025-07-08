@@ -53,6 +53,9 @@ let
     lspkind-nvim
     nvim-cmp
     cmp-nvim-lsp
+    cmp-buffer
+    cmp-cmdline
+    cmp_luasnip
     nvim-lspconfig
     vim-abolish
     vim-surround
@@ -78,6 +81,7 @@ let
     nvim-dap-virtual-text
     nvim-dap-python
     conform-nvim
+    luasnip
     rustaceanvim
   ];
   subsitutedInitLua = replaceVars ./init.lua {
