@@ -52,6 +52,7 @@ let
     typescript-tools-nvim
     lspkind-nvim
     nvim-cmp
+    cmp-nvim-lsp
     nvim-lspconfig
     vim-abolish
     vim-surround
