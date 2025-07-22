@@ -253,6 +253,9 @@ require("nvim-web-devicons").setup()
 -- nvim-autopairs
 require("nvim-autopairs").setup()
 
+-- repo-link
+require("repolink").setup()
+
 -- neotree
 require("neo-tree").setup({
 	filesystem = {
