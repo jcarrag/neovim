@@ -442,8 +442,8 @@ lspconfig.lua_ls.setup({
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
 			if
-				path ~= vim.fn.stdpath("config")
-				and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+					path ~= vim.fn.stdpath("config")
+					and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
 			then
 				return
 			end
@@ -539,7 +539,7 @@ vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua require('fzf-lua').git_files()<c
 vim.api.nvim_set_keymap(
 	"n",
 	"<leader><C-g>",
-	"<cmd>lua require('fzf-lua').grep_project({ file_icons=false, git_icons=false, fzf_opts = { ['--nth'] = '1..' }, rg_opts = '--hidden --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e' })<cr>",
+	"<cmd>lua require('fzf-lua').grep_project({ file_icons=false, git_icons=false, fzf_opts = { ['--nth'] = '1..' }, rg_opts = '--hidden --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -g \"!.git\" -e' })<cr>",
 	{ noremap = true }
 )
 vim.api.nvim_set_keymap("n", "<leader><C-w>", "<cmd>lua require('fzf-lua').buffers()<cr>", { noremap = true })
