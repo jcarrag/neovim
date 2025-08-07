@@ -180,7 +180,10 @@ require("fzf-lua").register_ui_select()
 -- project-nvim
 require("project_nvim").setup({
 	detection_methods = { "pattern" },
-	patterns = { ".git" },
+	patterns = {
+		".git",
+		"Cargo.toml",
+	},
 })
 
 -- typescript-tools-nvim
