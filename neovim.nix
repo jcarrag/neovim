@@ -88,7 +88,10 @@ let
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
       # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
-      (s: '']]${s},--[['')
+      (s: ''
+        ]]
+        ${s},
+        --[['')
     ];
   };
 in
