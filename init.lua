@@ -174,6 +174,24 @@ require("fzf-lua").setup({
 			["?"] = "toggle-preview",
 		},
 	},
+	actions = {
+		buffers = {
+			-- don't open buffer in current window, instead navigate to its tab/window
+			["enter"] = function(selected, _)
+				local buf = tonumber(selected[1]:match("^%[(%d+)%]"))
+				for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
+					for _, win in ipairs(vim.api.nvim_tabpage_list_wins(tab)) do
+						if vim.api.nvim_win_get_buf(win) == buf then
+							vim.api.nvim_set_current_tabpage(tab)
+							vim.api.nvim_set_current_win(win)
+							return
+						end
+					end
+				end
+				vim.api.nvim_set_current_buf(buf)
+			end,
+		},
+	},
 })
 require("fzf-lua").register_ui_select()
 
