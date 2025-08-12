@@ -158,6 +158,7 @@ require("telescope").setup()
 require("telescope").load_extension("projects")
 
 -- fzf-lua
+local actions = require("fzf-lua").actions
 require("fzf-lua").setup({
 	defaults = {
 		winopts = {
@@ -176,6 +177,9 @@ require("fzf-lua").setup({
 	},
 	actions = {
 		buffers = {
+			["ctrl-s"] = actions.file_split,
+			["ctrl-v"] = actions.file_vsplit,
+			["ctrl-t"] = actions.file_tabedit,
 			-- don't open buffer in current window, instead navigate to its tab/window
 			["enter"] = function(selected, _)
 				local buf = tonumber(selected[1]:match("^%[(%d+)%]"))
