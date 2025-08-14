@@ -7,6 +7,7 @@
   lua-language-server,
   vim-language-server,
   vscode-langservers-extracted,
+  vscode-extensions,
   nodePackages,
   dockerfile-language-server-nodejs,
   pyright,
@@ -25,6 +26,7 @@ let
     lua-language-server
     vim-language-server
     vscode-langservers-extracted
+    vscode-extensions.ms-vscode.cpptools
     nodePackages.typescript-language-server
     nodePackages.prettier
     dockerfile-language-server-nodejs
