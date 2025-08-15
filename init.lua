@@ -638,6 +638,44 @@ vim.keymap.set("n", "<leader><C-g>", function()
 		end)
 	end)
 end, { noremap = true })
+
+vim.api.nvim_create_user_command("FzfQf", function(opts)
+	local cmd = opts.args
+
+	if cmd == "" then
+		cmd = vim.fn.input("Shell command: ")
+		return
+	end
+
+	require("fzf-lua").fzf_exec(cmd, {
+		prompt = "Custom> ",
+		fzf_opts = { ["--multi"] = true },
+		actions = {
+			-- default action: send to quickfix list
+			["default"] = function(selected)
+				local qf_items = {}
+				for _, line in ipairs(selected) do
+					-- try to parse "file:line:col:message" style output
+					local file, lnum, col, text = line:match("([^:]+):(%d+):?(%d*):(.*)")
+					if file and lnum then
+						table.insert(qf_items, {
+							filename = file,
+							lnum = tonumber(lnum),
+							col = tonumber(col) ~= 0 and tonumber(col) or nil,
+							text = text ~= "" and text or line,
+						})
+					else
+						-- fallback: treat the whole line as filename
+						table.insert(qf_items, { filename = line })
+					end
+				end
+				vim.fn.setqflist(qf_items)
+				vim.cmd("copen")
+			end,
+		},
+	})
+end, { nargs = "*" })
+
 vim.api.nvim_set_keymap("n", "<leader><C-w>", "<cmd>lua require('fzf-lua').buffers()<cr>", { noremap = true })
 
 -- dap
