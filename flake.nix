@@ -31,6 +31,14 @@
           exePath = "/bin/nvim";
         };
         apps.default = self.apps.${system}.neovim;
+        devShell = pkgs.mkShell {
+          buildInputs = [
+            (pkgs.writeScriptBin "build_edit_self" ''
+              nix-build |& tee /dev/stderr | grep "trace: init.lua" | cut --delimiter=" " --field=3 | xargs ./result/bin/nvim
+            '')
+          ];
+        };
+
       }
     );
 }

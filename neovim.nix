@@ -45,6 +45,7 @@ let
     lualine-nvim
     material-nvim
     auto-session
+    firenvim
     nvim-treesitter
     nvim-treesitter.withAllGrammars
     nvim-treesitter-textobjects
@@ -102,7 +103,7 @@ wrapNeovim neovim-unwrapped {
   configure = {
     customRC = ''
       lua << EOF
-        ${builtins.readFile subsitutedInitLua}
+        ${builtins.readFile (lib.traceValFn (v: "init.lua: ${v}") subsitutedInitLua)}
       EOF
     '';
     packages.myPlugins = {
