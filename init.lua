@@ -360,6 +360,11 @@ require("gitsigns").setup({
 	end,
 })
 
+-- telekasten
+require("telekasten").setup({
+	home = vim.fn.expand("~/notes"),
+})
+
 -- dap
 
 local function dirLookup(dir)
@@ -495,12 +500,8 @@ require("conform").setup({
 -- lspconfig
 --
 
-local lspconfig = require("lspconfig")
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
 -- https://github.com/neovim/nvim-lspconfig/blob/bb3fb99cf14daa33014331ac6eb4b5de9180f775/lsp/lua_ls.lua
-lspconfig.lua_ls.setup({
-	capabilities = capabilities,
+vim.lsp.config("lua_ls", {
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
@@ -542,19 +543,19 @@ lspconfig.lua_ls.setup({
 		Lua = {},
 	},
 })
-lspconfig.lua_ls.setup({ capabilities = capabilities })
-lspconfig.cmake.setup({ capabilities = capabilities })
-lspconfig.nixd.setup({ capabilities = capabilities })
-lspconfig.nixd.setup({
-	capabilities = capabilities,
+vim.lsp.enable("lua_ls")
+vim.lsp.enable("cmake")
+vim.lsp.config("nixd", {
 	settings = { nixd = { formatting = { command = { "nixfmt" } } } },
 })
-lspconfig.dockerls.setup({ capabilities = capabilities })
-lspconfig.jsonls.setup({ capabilities = capabilities })
-lspconfig.gopls.setup({ capabilities = capabilities })
-lspconfig.pyright.setup({ capabilities = capabilities })
-lspconfig.vimls.setup({ capabilities = capabilities })
-lspconfig.clangd.setup({ capabilities = capabilities })
+vim.lsp.enable("nixd")
+vim.lsp.enable("dockerls")
+vim.lsp.enable("jsonls")
+vim.lsp.enable("gopls")
+vim.lsp.enable("pyright")
+vim.lsp.enable("vimls")
+vim.lsp.enable("clangd")
+vim.lsp.enable("marksman")
 
 --
 -- Mappings
