@@ -493,6 +493,11 @@ require("conform").setup({
 		typescript = { "prettier" },
 		typescriptreact = { "prettier" },
 		lua = { "stylua" },
+		python = {
+			"ruff_fix",
+			"ruff_format",
+			"ruff_organize_imports",
+		},
 	},
 })
 

@@ -13,6 +13,7 @@
   nodePackages,
   dockerfile-language-server-nodejs,
   pyright,
+  ruff,
   gopls,
   clang-tools,
   rust-analyzer,
@@ -34,6 +35,7 @@ let
     nodePackages.prettier
     dockerfile-language-server-nodejs
     pyright
+    ruff
     gopls
     rust-analyzer
     nixd
