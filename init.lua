@@ -204,7 +204,9 @@ require("project_nvim").setup({
 	detection_methods = { "pattern" },
 	patterns = {
 		".git",
-		"Cargo.toml",
+		-- This is not needed since lsp-config/rust-analyzer will find the nearest Cargo.toml, see:
+		-- https://github.com/neovim/nvim-lspconfig/blob/060f6b6/lsp/rust_analyzer.lua#L67
+		-- "Cargo.toml",
 	},
 })
 
