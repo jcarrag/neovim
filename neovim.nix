@@ -23,6 +23,8 @@
   cmake-language-server,
   stylua,
   marksman,
+  bash-language-server,
+  shfmt,
 }:
 
 let
@@ -45,6 +47,8 @@ let
     clang-tools
     stylua
     marksman
+    bash-language-server
+    shfmt
   ];
   _vimPlugins =
     let
