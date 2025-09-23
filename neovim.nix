@@ -89,6 +89,7 @@ let
       vim-sleuth
       vim-repeat
       nvim-web-devicons
+      nvim-colorizer-lua
       surround-nvim
       vim-multiple-cursors
       csv-vim
