@@ -382,7 +382,80 @@ local function dirLookup(dir)
 	end
 end
 
+require("dap-vscode-js").setup({
+	adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
+})
+
+-- override the pwa-node#launch impl: https://github.com/mxsdev/nvim-dap-vscode-js/issues/58#issuecomment-2569782276
+require("dap").adapters["pwa-node"] = {
+	type = "server",
+	host = "localhost",
+	port = "${port}",
+	executable = {
+		command = "node",
+		args = {
+			"@vscode-js-debug@/lib/node_modules/js-debug/dist/src/dapDebugServer.js",
+			"${port}",
+		},
+	},
+}
+
 local dap = require("dap")
+for _, language in ipairs({ "typescript", "javascript" }) do
+	require("dap").configurations[language] = {
+		{
+			type = "pwa-node",
+			request = "launch",
+			name = "Launch file",
+			program = "${file}",
+			cwd = "${workspaceFolder}",
+			sourceMaps = true,
+			resolveSourceMapLocations = {
+				"${workspaceFolder}/**",
+				"!**/node_modules/**",
+			},
+			runtimeExecutable = "tsx",
+			runtimeArgs = { "--inspect" },
+			skipFiles = { "<node_internals>/**", "node_modules/**" },
+			console = "integratedTerminal",
+		},
+		{
+			type = "pwa-node",
+			request = "launch",
+			name = "Run vitest",
+			program = "${file}",
+			cwd = "${workspaceFolder}",
+			sourceMaps = true,
+			resolveSourceMapLocations = {
+				"${workspaceFolder}/**",
+				"!**/node_modules/**",
+			},
+			runtimeExecutable = "vitest",
+			runtimeArgs = {
+				"run",
+				"--inspect-brk",
+				"--no-file-parallelism",
+			},
+			skipFiles = { "<node_internals>/**", "node_modules/**" },
+			console = "integratedTerminal",
+		},
+		{
+			type = "pwa-node",
+			request = "attach",
+			name = "Attach",
+			processId = require("dap.utils").pick_process,
+			cwd = "${workspaceFolder}",
+			sourceMaps = true,
+			resolveSourceMapLocations = {
+				"${workspaceFolder}/**",
+				"!**/node_modules/**",
+			},
+			skipFiles = { "<node_internals>/**", "node_modules/**" },
+			console = "integratedTerminal",
+		},
+	}
+end
+
 dap.adapters.cppdbg = {
 	id = "cppdbg",
 	type = "executable",
@@ -695,6 +768,7 @@ vim.api.nvim_set_keymap("n", "<leader><C-w>", "<cmd>lua require('fzf-lua').buffe
 vim.api.nvim_set_keymap("n", "<leader>db", "<cmd>lua require('dap').toggle_breakpoint()<cr>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>dc", "<cmd>lua require('dap').continue()<cr>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>so", "<cmd>lua require('dap').step_over()<cr>", { noremap = true })
+vim.api.nvim_set_keymap("n", "<leader>sO", "<cmd>lua require('dap').step_out()<cr>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>si", "<cmd>lua require('dap').step_into()<cr>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<leader>du", "<cmd>lua require('dapui').toggle()<cr>", { noremap = true })
 

@@ -8,6 +8,7 @@
   vimPlugins,
   lua-language-server,
   vim-language-server,
+  vscode-js-debug,
   vscode-langservers-extracted,
   vscode-extensions,
   nodePackages,
@@ -31,6 +32,7 @@ let
   buildInputs = [
     lua-language-server
     vim-language-server
+    vscode-js-debug
     vscode-langservers-extracted
     vscode-extensions.ms-vscode.cpptools
     nodePackages.typescript-language-server
@@ -111,6 +113,7 @@ let
       nvim-dap-ui
       nvim-dap-virtual-text
       nvim-dap-python
+      nvim-dap-vscode-js
       conform-nvim
       luasnip
       rustaceanvim
@@ -118,6 +121,7 @@ let
       calendar-vim
     ];
   subsitutedInitLua = replaceVars ./init.lua {
+    vscode-js-debug = vscode-js-debug;
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
       # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
