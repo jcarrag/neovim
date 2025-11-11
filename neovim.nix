@@ -15,6 +15,7 @@
   dockerfile-language-server-nodejs,
   pyright,
   ruff,
+  eslint,
   gopls,
   clang-tools,
   rust-analyzer,
@@ -40,6 +41,7 @@ let
     dockerfile-language-server-nodejs
     pyright
     ruff
+    eslint
     gopls
     rust-analyzer
     nixd
@@ -85,6 +87,7 @@ let
       cmp-buffer
       cmp-cmdline
       cmp_luasnip
+      nvim-lint
       nvim-lspconfig
       vim-abolish
       vim-surround
