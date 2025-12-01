@@ -2,7 +2,7 @@
   description = "my neovim config";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=nixos-25.11";
     flake-compat.url = "github:edolstra/flake-compat";
     flake-utils.url = "github:numtide/flake-utils";
   };
