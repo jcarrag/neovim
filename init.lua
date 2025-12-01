@@ -153,10 +153,6 @@ require("nvim-treesitter.configs").setup({
 	indent = { enable = false },
 })
 
--- telescope
-require("telescope").setup()
-require("telescope").load_extension("projects")
-
 -- fzf-lua
 local actions = require("fzf-lua").actions
 require("fzf-lua").setup({
@@ -200,8 +196,7 @@ require("fzf-lua").setup({
 require("fzf-lua").register_ui_select()
 
 -- project-nvim
-require("project_nvim").setup({
-	detection_methods = { "pattern" },
+require("project").setup({
 	patterns = {
 		".git",
 		-- This is not needed since lsp-config/rust-analyzer will find the nearest Cargo.toml, see:
@@ -209,6 +204,10 @@ require("project_nvim").setup({
 		-- "Cargo.toml",
 	},
 })
+
+-- telescope
+require("telescope").setup()
+require("telescope").load_extension("projects")
 
 -- typescript-tools-nvim
 require("typescript-tools").setup({
