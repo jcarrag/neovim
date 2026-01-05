@@ -80,6 +80,7 @@ let
       telescope-nvim
       fzf-lua
       project-nvim
+      obsidian-nvim
       typescript-tools-nvim
       lspkind-nvim
       nvim-cmp

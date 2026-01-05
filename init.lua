@@ -205,6 +205,26 @@ require("project").setup({
 	},
 })
 
+-- obsidian-nvim
+require("obsidian").setup({
+	legacy_commands = false,
+	workspaces = {
+		{
+			name = "notes",
+			path = vim.fn.expand("~/notes"),
+		},
+	},
+	daily_notes = {
+		folder = "daily",
+		template = "daily",
+	},
+	templates = {
+		folder = "templates",
+		date_format = "%Y-%m-%d-%a",
+		time_format = "%H:%M",
+	},
+})
+
 -- telescope
 require("telescope").setup()
 require("telescope").load_extension("projects")
