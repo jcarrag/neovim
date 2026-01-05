@@ -3,8 +3,6 @@
   replaceVars,
   wrapNeovim,
   neovim-unwrapped,
-  fetchFromGitHub,
-  vimUtils,
   vimPlugins,
   lua-language-server,
   vim-language-server,
@@ -55,18 +53,6 @@ let
     shfmt
   ];
   _vimPlugins =
-    let
-      calendar-vim = vimUtils.buildVimPlugin {
-        pname = "calendar-vim";
-        version = "2025-08-29";
-        src = fetchFromGitHub {
-          owner = "nvim-telekasten";
-          repo = "calendar-vim";
-          rev = "master";
-          sha256 = "sha256-4XeDd+myM+wtHUsr3s1H9+GAwIjK8fAqBbFnBCeatPo=";
-        };
-      };
-    in
     with vimPlugins;
     [
       plenary-nvim
@@ -121,8 +107,6 @@ let
       conform-nvim
       luasnip
       rustaceanvim
-      telekasten-nvim
-      calendar-vim
     ];
   subsitutedInitLua = replaceVars ./init.lua {
     vscode-js-debug = vscode-js-debug;

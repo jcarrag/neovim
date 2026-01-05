@@ -395,11 +395,6 @@ require("gitsigns").setup({
 	end,
 })
 
--- telekasten
-require("telekasten").setup({
-	home = vim.fn.expand("~/notes"),
-})
-
 -- dap
 
 local function dirLookup(dir)
