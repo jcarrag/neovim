@@ -52,62 +52,60 @@ let
     bash-language-server
     shfmt
   ];
-  _vimPlugins =
-    with vimPlugins;
-    [
-      plenary-nvim
-      lualine-nvim
-      material-nvim
-      auto-session
-      firenvim
-      nvim-treesitter
-      nvim-treesitter.withAllGrammars
-      nvim-treesitter-textobjects
-      telescope-nvim
-      fzf-lua
-      project-nvim
-      obsidian-nvim
-      typescript-tools-nvim
-      lspkind-nvim
-      nvim-cmp
-      cmp-nvim-lsp
-      cmp-buffer
-      cmp-cmdline
-      cmp_luasnip
-      nvim-lint
-      nvim-lspconfig
-      vim-abolish
-      vim-surround
-      vim-sleuth
-      vim-repeat
-      nvim-web-devicons
-      nvim-colorizer-lua
-      surround-nvim
-      vim-multiple-cursors
-      csv-vim
-      nvim-autopairs
-      # when entering a .envrc dir, this will override the $PATH defined by the
-      # buildInputs above, which breaks all LSPs integrations as their underlying
-      # LSP server binaries are no longer available on $PATH
-      # direnv-vim
-      file-line
-      rest-nvim
-      markdown-preview-nvim
-      repolink-nvim
-      neo-tree-nvim
-      fidget-nvim
-      trouble-nvim
-      comment-nvim
-      gitsigns-nvim
-      nvim-dap
-      nvim-dap-ui
-      nvim-dap-virtual-text
-      nvim-dap-python
-      nvim-dap-vscode-js
-      conform-nvim
-      luasnip
-      rustaceanvim
-    ];
+  _vimPlugins = with vimPlugins; [
+    plenary-nvim
+    lualine-nvim
+    material-nvim
+    auto-session
+    firenvim
+    nvim-treesitter
+    nvim-treesitter.withAllGrammars
+    nvim-treesitter-textobjects
+    telescope-nvim
+    fzf-lua
+    project-nvim
+    obsidian-nvim
+    typescript-tools-nvim
+    lspkind-nvim
+    nvim-cmp
+    cmp-nvim-lsp
+    cmp-buffer
+    cmp-cmdline
+    cmp_luasnip
+    nvim-lint
+    nvim-lspconfig
+    vim-abolish
+    vim-surround
+    vim-sleuth
+    vim-repeat
+    nvim-web-devicons
+    nvim-colorizer-lua
+    surround-nvim
+    vim-multiple-cursors
+    csv-vim
+    nvim-autopairs
+    # when entering a .envrc dir, this will override the $PATH defined by the
+    # buildInputs above, which breaks all LSPs integrations as their underlying
+    # LSP server binaries are no longer available on $PATH
+    # direnv-vim
+    file-line
+    rest-nvim
+    markdown-preview-nvim
+    repolink-nvim
+    neo-tree-nvim
+    fidget-nvim
+    trouble-nvim
+    comment-nvim
+    gitsigns-nvim
+    nvim-dap
+    nvim-dap-ui
+    nvim-dap-virtual-text
+    nvim-dap-python
+    nvim-dap-vscode-js
+    conform-nvim
+    luasnip
+    rustaceanvim
+  ];
   subsitutedInitLua = replaceVars ./init.lua {
     vscode-js-debug = vscode-js-debug;
     vimPluginsPaths = lib.pipe _vimPlugins [
