@@ -105,6 +105,7 @@ let
     conform-nvim
     luasnip
     rustaceanvim
+    codecompanion-nvim
   ];
   subsitutedInitLua = replaceVars ./init.lua {
     vscode-js-debug = vscode-js-debug;

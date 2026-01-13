@@ -604,6 +604,63 @@ require("conform").setup({
 	},
 })
 
+-- codecompanion
+require("codecompanion").setup({
+	opts = {
+		log_level = "DEBUG",
+	},
+	adapters = {
+		-- available in newer version of plugin
+		-- opts = {
+		-- 	-- time to type out OP password
+		-- 	cmd_timeout = 10e4,
+		-- },
+		http = {
+			opts = {
+				-- show_presets = false,
+				-- show_model_choices = false,
+			},
+			gemini = function()
+				return require("codecompanion.adapters").extend("gemini", {
+					env = {
+						api_key = "cmd:op read op://personal/Gemini/password --no-newline",
+					},
+				})
+			end,
+		},
+	},
+	-- available in newer version of plugin
+	-- interactions = {
+	-- 	background = {
+	-- 		adapter = "gemini",
+	-- 	},
+	-- 	chat = {
+	-- 		adapter = "gemini",
+	-- 	},
+	-- 	inline = {
+	-- 		adapter = "gemini",
+	-- 	},
+	-- 	cmd = {
+	-- 		adapter = "gemini",
+	-- 	},
+	-- },
+	--
+	-- removed in newer version of plugin
+	interactions = {
+		background = {
+			adapter = "gemini",
+		},
+	},
+	strategies = {
+		inline = {
+			adapter = "gemini",
+		},
+		cmd = {
+			adapter = "gemini",
+		},
+	},
+})
+
 --
 -- lspconfig
 --
