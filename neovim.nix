@@ -87,7 +87,7 @@ let
     # when entering a .envrc dir, this will override the $PATH defined by the
     # buildInputs above, which breaks all LSPs integrations as their underlying
     # LSP server binaries are no longer available on $PATH
-    # direnv-vim
+    direnv-vim
     file-line
     rest-nvim
     markdown-preview-nvim

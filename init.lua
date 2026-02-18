@@ -793,7 +793,7 @@ vim.keymap.set("n", "<leader><C-g>", function()
 				git_icons = false,
 				fzf_opts = { ["--nth"] = "1.." },
 				rg_opts = ([[
-					  --hidden
+					  --no-hidden
 					  --column
 					  --line-number
 					  --no-heading
