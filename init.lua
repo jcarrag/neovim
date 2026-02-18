@@ -25,6 +25,7 @@ vim.opt.undolevels = 1000
 vim.opt.undoreload = 10000
 vim.opt.tabstop = 2
 vim.opt.shiftwidth = 2
+vim.opt.conceallevel = 1
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.scrolloff = 1
