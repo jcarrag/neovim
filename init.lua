@@ -724,7 +724,7 @@ vim.lsp.enable("gopls")
 vim.lsp.enable("pyright")
 vim.lsp.enable("vimls")
 vim.lsp.enable("clangd")
-vim.lsp.enable("marksman")
+-- vim.lsp.enable("marksman")
 vim.lsp.enable("bashls")
 
 --
