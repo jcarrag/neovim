@@ -212,7 +212,7 @@ require("obsidian").setup({
 	workspaces = {
 		{
 			name = "notes",
-			path = vim.fn.expand("~/notes"),
+			path = vim.fn.expand("/home/james/notes"),
 		},
 	},
 	daily_notes = {
