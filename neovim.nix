@@ -15,6 +15,7 @@
   ruff,
   eslint,
   gopls,
+  kotlin-language-server,
   clang-tools,
   rust-analyzer,
   nixd,
@@ -41,6 +42,7 @@ let
     ruff
     eslint
     gopls
+    kotlin-language-server
     rust-analyzer
     nixd
     nixfmt-rfc-style
