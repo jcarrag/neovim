@@ -767,6 +767,7 @@ vim.api.nvim_set_keymap(
 vim.api.nvim_set_keymap("n", "<leader>fw", "<cmd>Telescope telescope-cargo-workspace switch<cr>", { noremap = true })
 
 -- fzf
+vim.api.nvim_set_keymap("n", "<leader>m", "<cmd>FzfLua marks<cr>", { noremap = true })
 vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua require('fzf-lua').git_files()<cr>", { noremap = true })
 -- a couple of necessary extra params here:
 -- 1. disable adding icons since it makes fzf 10x slower (https://github.com/ibhagwan/fzf-lua/issues/1005#issuecomment-1894367825)
