@@ -20,38 +20,24 @@
   rust-analyzer,
   nixd,
   nixfmt-rfc-style,
-  metals,
   cmake-language-server,
   stylua,
-  marksman,
   bash-language-server,
   shfmt,
 }:
 
 let
+  # Tools that need to be on PATH (formatters, linters, etc.)
+  # LSP servers now use absolute paths via replaceVars
   buildInputs = [
-    lua-language-server
-    vim-language-server
     vscode-js-debug
-    vscode-langservers-extracted
     vscode-extensions.ms-vscode.cpptools
     nodePackages.typescript-language-server
     nodePackages.prettier
-    dockerfile-language-server-nodejs
-    pyright
     ruff
     eslint
-    gopls
-    kotlin-language-server
     rust-analyzer
-    nixd
-    nixfmt-rfc-style
-    metals
-    cmake-language-server
-    clang-tools
     stylua
-    marksman
-    bash-language-server
     shfmt
   ];
   _vimPlugins = with vimPlugins; [
@@ -110,7 +96,22 @@ let
     codecompanion-nvim
   ];
   subsitutedInitLua = replaceVars ./init.lua {
-    vscode-js-debug = vscode-js-debug;
+    inherit
+      nixfmt-rfc-style
+      dockerfile-language-server-nodejs
+      vscode-js-debug
+      lua-language-server
+      cmake-language-server
+      nixd
+      vscode-langservers-extracted
+      gopls
+      kotlin-language-server
+      pyright
+      vim-language-server
+      clang-tools
+      bash-language-server
+      rust-analyzer
+      ;
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
       # `@...@` is invalid syntax in lua, so inline unquote it when interpolating

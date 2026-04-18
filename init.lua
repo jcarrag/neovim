@@ -232,6 +232,10 @@ require("telescope").load_extension("projects")
 
 -- typescript-tools-nvim
 require("typescript-tools").setup({
+	root_dir = function(fname)
+		local util = require("lspconfig.util")
+		return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json")(fname)
+	end,
 	settings = {
 		publish_diagnostic_on = "change",
 		expose_as_code_action = "all",
@@ -669,8 +673,32 @@ require("codecompanion").setup({
 -- lspconfig
 --
 
+-- Helper function to prioritize direnv/PATH executables over hardcoded Nix paths
+local function resolve_lsp_cmd(binary_name, nix_fallback_path)
+	local exe_path = vim.fn.exepath(binary_name)
+	return #exe_path > 0 and exe_path or nix_fallback_path
+end
+
+vim.g.rustaceanvim = {
+	server = {
+		cmd = function()
+			return resolve_lsp_cmd("rust-analyzer", "@rust-analyzer@/bin/rust-analyzer")
+		end,
+	},
+}
+
 -- https://github.com/neovim/nvim-lspconfig/blob/bb3fb99cf14daa33014331ac6eb4b5de9180f775/lsp/lua_ls.lua
 vim.lsp.config("lua_ls", {
+	cmd = { resolve_lsp_cmd("lua-language-server", "@lua-language-server@/bin/lua-language-server") },
+	root_markers = {
+		".luarc.json",
+		".luarc.jsonc",
+		".luacheckrc",
+		".stylua.toml",
+		"stylua.toml",
+		"selene.toml",
+		"selene.yml",
+	},
 	on_init = function(client)
 		if client.workspace_folders then
 			local path = client.workspace_folders[1].name
@@ -712,20 +740,76 @@ vim.lsp.config("lua_ls", {
 		Lua = {},
 	},
 })
+
 vim.lsp.enable("lua_ls")
+
+vim.lsp.config("cmake", {
+	cmd = { resolve_lsp_cmd("cmake", "@cmake-language-server@/bin/cmake-language-server") },
+	root_markers = { "CMakeLists.txt", "CMakePresets.json", "CTestConfig.cmake", "cmake" },
+})
 vim.lsp.enable("cmake")
+
 vim.lsp.config("nixd", {
-	settings = { nixd = { formatting = { command = { "nixfmt" } } } },
+	cmd = { resolve_lsp_cmd("nixd", "@nixd@/bin/nixd") },
+	root_markers = { "flake.nix", "default.nix", "shell.nix" },
+	settings = { nixd = { formatting = { command = { "@nixfmt-rfc-style@/bin/nixfmt" } } } },
 })
 vim.lsp.enable("nixd")
+
+vim.lsp.config("dockerls", {
+	cmd = {
+		resolve_lsp_cmd("docker-langserver", "@dockerfile-language-server-nodejs@/bin/docker-langserver"),
+		"--stdio",
+	},
+})
 vim.lsp.enable("dockerls")
+
+vim.lsp.config("jsonls", {
+	cmd = {
+		resolve_lsp_cmd(
+			"vscode-json-language-server",
+			"@vscode-langservers-extracted@/bin/vscode-json-language-server"
+		),
+		"--stdio",
+	},
+})
 vim.lsp.enable("jsonls")
+
+vim.lsp.config("gopls", {
+	cmd = { resolve_lsp_cmd("gopls", "@gopls@/bin/gopls") },
+	root_markers = { "go.work", "go.mod" },
+})
 vim.lsp.enable("gopls")
+
+vim.lsp.config("kotlin_language_server", {
+	cmd = {
+		resolve_lsp_cmd("kotlin-language-server", "@kotlin-language-server@/bin/kotlin-language-server"),
+	},
+	cmd_env = { JAVA_OPTS = "-Xmx16g -Dorg.slf4j.simpleLogger.defaultLogLevel=debug" },
+	root_markers = { "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", "pom.xml" },
+})
 vim.lsp.enable("kotlin_language_server")
+
+vim.lsp.config("pyright", {
+	cmd = { resolve_lsp_cmd("pyright", "@pyright@/bin/pyright-langserver"), "--stdio" },
+	root_markers = { "pyrightconfig.json", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile" },
+})
 vim.lsp.enable("pyright")
+
+vim.lsp.config("vimls", {
+	cmd = { resolve_lsp_cmd("vimls", "@vim-language-server@/bin/vim-language-server"), "--stdio" },
+})
 vim.lsp.enable("vimls")
+
+vim.lsp.config("clangd", {
+	cmd = { resolve_lsp_cmd("clangd", "@clang-tools@/bin/clangd") },
+	root_markers = { ".clangd", ".clang-tidy", ".clang-format", "compile_commands.json", "compile_flags.txt" },
+})
 vim.lsp.enable("clangd")
--- vim.lsp.enable("marksman")
+
+vim.lsp.config("bashls", {
+	cmd = { resolve_lsp_cmd("bashls", "@bash-language-server@/bin/bash-language-server"), "start" },
+})
 vim.lsp.enable("bashls")
 
 --
