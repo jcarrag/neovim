@@ -679,10 +679,26 @@ local function resolve_lsp_cmd(binary_name, nix_fallback_path)
 	return #exe_path > 0 and exe_path or nix_fallback_path
 end
 
+-- For rust-analyzer specifically: the neovim nix wrapper prepends its own
+-- bundled rust-analyzer to PATH, which would shadow any rust-analyzer from a
+-- direnv/flake shell. Since a flake-provided rust-analyzer must match the
+-- flake's cargo (they share internal APIs), prefer a rust-analyzer sitting
+-- next to the `cargo` on PATH. Fall back to the generic resolver otherwise.
+local function resolve_rust_analyzer()
+	local cargo = vim.fn.exepath("cargo")
+	if #cargo > 0 then
+		local candidate = vim.fn.fnamemodify(cargo, ":h") .. "/rust-analyzer"
+		if vim.fn.executable(candidate) == 1 then
+			return candidate
+		end
+	end
+	return resolve_lsp_cmd("rust-analyzer", "@rust-analyzer@/bin/rust-analyzer")
+end
+
 vim.g.rustaceanvim = {
 	server = {
 		cmd = function()
-			return resolve_lsp_cmd("rust-analyzer", "@rust-analyzer@/bin/rust-analyzer")
+			return { resolve_rust_analyzer() }
 		end,
 	},
 }
