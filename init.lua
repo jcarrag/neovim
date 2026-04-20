@@ -232,10 +232,6 @@ require("telescope").load_extension("projects")
 
 -- typescript-tools-nvim
 require("typescript-tools").setup({
-	root_dir = function(fname)
-		local util = require("lspconfig.util")
-		return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json")(fname)
-	end,
 	settings = {
 		publish_diagnostic_on = "change",
 		expose_as_code_action = "all",
