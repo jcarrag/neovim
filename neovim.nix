@@ -55,6 +55,7 @@ let
     obsidian-nvim
     typescript-tools-nvim
     lspkind-nvim
+    lsp_lines-nvim
     nvim-cmp
     cmp-nvim-lsp
     cmp-buffer
