@@ -9,8 +9,9 @@
   vscode-js-debug,
   vscode-langservers-extracted,
   vscode-extensions,
-  nodePackages,
-  dockerfile-language-server-nodejs,
+  dockerfile-language-server,
+  typescript-language-server,
+  prettier,
   pyright,
   ruff,
   eslint,
@@ -19,7 +20,7 @@
   clang-tools,
   rust-analyzer,
   nixd,
-  nixfmt-rfc-style,
+  nixfmt,
   cmake-language-server,
   stylua,
   bash-language-server,
@@ -32,8 +33,8 @@ let
   buildInputs = [
     vscode-js-debug
     vscode-extensions.ms-vscode.cpptools
-    nodePackages.typescript-language-server
-    nodePackages.prettier
+    typescript-language-server
+    prettier
     ruff
     eslint
     rust-analyzer
@@ -98,8 +99,8 @@ let
   ];
   subsitutedInitLua = replaceVars ./init.lua {
     inherit
-      nixfmt-rfc-style
-      dockerfile-language-server-nodejs
+      nixfmt
+      dockerfile-language-server
       vscode-js-debug
       lua-language-server
       cmake-language-server
