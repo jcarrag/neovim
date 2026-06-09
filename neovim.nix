@@ -16,7 +16,7 @@
   ruff,
   eslint,
   gopls,
-  kotlin-language-server,
+  kotlin-lsp,
   clang-tools,
   rust-analyzer,
   nixd,
@@ -107,7 +107,7 @@ let
       nixd
       vscode-langservers-extracted
       gopls
-      kotlin-language-server
+      kotlin-lsp
       pyright
       vim-language-server
       clang-tools

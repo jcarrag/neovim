@@ -737,14 +737,11 @@ vim.lsp.config("gopls", {
 })
 vim.lsp.enable("gopls")
 
-vim.lsp.config("kotlin_language_server", {
-	cmd = {
-		resolve_lsp_cmd("kotlin-language-server", "@kotlin-language-server@/bin/kotlin-language-server"),
-	},
-	cmd_env = { JAVA_OPTS = "-Xmx16g -Dorg.slf4j.simpleLogger.defaultLogLevel=debug" },
+vim.lsp.config("kotlin-lsp", {
+	cmd = { resolve_lsp_cmd("kotlin-lsp", "@kotlin-lsp@/bin/kotlin-lsp"), "--stdio" },
 	root_markers = { "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", "pom.xml" },
 })
-vim.lsp.enable("kotlin_language_server")
+vim.lsp.enable("kotlin-lsp")
 
 vim.lsp.config("pyright", {
 	cmd = { resolve_lsp_cmd("pyright", "@pyright@/bin/pyright-langserver"), "--stdio" },

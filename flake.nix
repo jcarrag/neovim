@@ -23,7 +23,9 @@
         };
       in
       {
-        packages.neovim = pkgs.callPackage ./neovim.nix { };
+        packages.neovim = pkgs.callPackage ./neovim.nix {
+          kotlin-lsp = pkgs.callPackage ./pkgs/kotlin-lsp/package.nix { };
+        };
         packages.default = self.packages.${system}.neovim;
         apps.neovim = flake-utils.lib.mkApp {
           drv = self.packages.${system}.neovim;
