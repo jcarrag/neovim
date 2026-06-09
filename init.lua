@@ -1,7 +1,6 @@
 --
 -- Options
 --
-
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -62,6 +61,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 -- lsp diagnostics
+vim.lsp.log.set_level("info") -- or "debug"
+
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
 for type, icon in pairs(signs) do
 	local hl = "DiagnosticSign" .. type
