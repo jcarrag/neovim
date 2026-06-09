@@ -284,22 +284,25 @@ require("neo-tree").setup({
 	},
 	buffers = { follow_current_file = { enable = true } },
 })
--- auto close https://github.com/gomfol12/dotfiles/blob/47efefe2bfe3f800b0f94b5036e83a79e85fac4c/.config/nvim/lua/tree.lua#L103C3-L124
-local function non_floating_wins_count()
-	local i = 0
-	for _, v in pairs(vim.api.nvim_list_wins()) do
-		if vim.api.nvim_win_get_config(v).relative == "" then
-			i = i + 1
-		end
-	end
-	return i
-end
-vim.api.nvim_create_autocmd("BufEnter", {
+-- auto close neo-tree if it's the last window in the tab
+vim.api.nvim_create_autocmd("WinClosed", {
 	nested = true,
 	callback = function()
-		if non_floating_wins_count() == 1 and vim.api.nvim_buf_get_name(0):match("neo-tree") ~= nil then
-			vim.cmd("quit")
-		end
+		vim.schedule(function()
+			local wins = vim.tbl_filter(function(w)
+				return vim.api.nvim_win_get_config(w).relative == ""
+			end, vim.api.nvim_tabpage_list_wins(0))
+			if #wins == 1 then
+				local buf = vim.api.nvim_win_get_buf(wins[1])
+				if vim.bo[buf].filetype == "neo-tree" then
+					if #vim.api.nvim_list_tabpages() > 1 then
+						vim.api.nvim_win_close(wins[1], false)
+					else
+						vim.cmd("quit")
+					end
+				end
+			end
+		end)
 	end,
 })
 
