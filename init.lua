@@ -815,26 +815,28 @@ vim.api.nvim_set_keymap("n", "<C-g>", "<cmd>lua require('fzf-lua').git_files()<c
 -- 2. include filename in fzf's fuzzy search
 -- 3. set fzf's cwd to be git_root if available, otherwise neovim's cwd - this replaces using project_root which breaks when it
 --    changes neovim's root to be something other than git root (e.g. Cargo.toml directory)
+-- 4. disable rg_glob: any truthy rg_glob sets fn_transform during normalize_opts, which pipes all rg output through a
+--    headless-nvim per-line transformer (~13x slower than rg) even with icons disabled; glob parsing is meaningless
+--    here anyway since search is empty and fzf does the matching
 vim.keymap.set("n", "<leader><C-g>", function()
 	vim.system({ "git", "rev-parse", "--show-toplevel" }, { text = true }, function(obj)
-		local search_path = nil
-
-		if obj.code == 0 then
-			search_path = obj.stdout:gsub("\n", "")
-		else
-			search_path = vim.schedule(function()
-				vim.fn.getcwd()
-			end)
-		end
-
 		-- use vim.schedule to prevent:
 		-- > Vimscript function must not be called in a fast event context
 		vim.schedule(function()
+			local search_path
+
+			if obj.code == 0 then
+				search_path = obj.stdout:gsub("\n", "")
+			else
+				search_path = vim.fn.getcwd()
+			end
+
 			require("fzf-lua").grep({
 				search = "", -- imitate project_grep
 				cwd = search_path,
 				file_icons = false,
 				git_icons = false,
+				rg_glob = false,
 				fzf_opts = { ["--nth"] = "1.." },
 				rg_opts = ([[
 					  --no-hidden
