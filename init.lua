@@ -82,6 +82,16 @@ vim.cmd([[autocmd! CursorHold * lua vim.diagnostic.open_float(nil, {focus=false}
 -- Plugins
 --
 
+-- treesitter
+vim.api.nvim_create_autocmd("FileType", {
+	callback = function(ev)
+		local lang = vim.treesitter.language.get_lang(ev.match)
+		if lang and vim.treesitter.language.add(lang) then
+			vim.treesitter.start(ev.buf, lang)
+		end
+	end,
+})
+
 -- lsp-lines
 require("lsp_lines").setup()
 vim.keymap.set("", "<Leader>l", require("lsp_lines").toggle, { desc = "Toggle lsp_lines" })
