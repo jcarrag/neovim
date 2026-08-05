@@ -995,9 +995,31 @@ end
 -- only close other windows other than this one and NERDTree
 function OnlyAndNeotree()
 	local currentWindowId = vim.api.nvim_get_current_win()
+	local currentBuf = vim.api.nvim_win_get_buf(currentWindowId)
+	local currentIsNeotree = vim.api.nvim_get_option_value("filetype", { buf = currentBuf }) == "neo-tree"
+
+	-- If focused on neo-tree, find the last non-neo-tree window to keep
+	local keepWindowId = nil
+	if currentIsNeotree then
+		for _, windowId in pairs(vim.api.nvim_tabpage_list_wins(0)) do
+			local buf = vim.api.nvim_win_get_buf(windowId)
+			if
+				vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= "neo-tree"
+				and vim.api.nvim_win_get_config(windowId).relative == ""
+			then
+				keepWindowId = windowId
+			end
+		end
+	end
+
 	for _, windowId in pairs(vim.api.nvim_tabpage_list_wins(0)) do
 		local buf = vim.api.nvim_win_get_buf(windowId)
-		if windowId ~= currentWindowId and vim.api.nvim_get_option_value("filetype", { buf = buf }) ~= "neo-tree" then
+		local ft = vim.api.nvim_get_option_value("filetype", { buf = buf })
+		if ft == "neo-tree" then
+			-- always keep neo-tree
+		elseif currentIsNeotree and windowId == keepWindowId then
+			-- keep the one non-neo-tree window we chose to preserve
+		elseif windowId ~= currentWindowId then
 			vim.api.nvim_win_call(windowId, function()
 				vim.cmd("silent! close")
 			end)
