@@ -25,6 +25,7 @@
   stylua,
   bash-language-server,
   shfmt,
+  libfaketime,
 }:
 
 let
@@ -61,6 +62,8 @@ let
     cmp-nvim-lsp
     cmp-buffer
     cmp-cmdline
+    cmp-nvim-lua
+    cmp-path
     cmp_luasnip
     nvim-lint
     nvim-lspconfig
@@ -113,7 +116,9 @@ let
       clang-tools
       bash-language-server
       rust-analyzer
+      libfaketime
       ;
+    cpptools = vscode-extensions.ms-vscode.cpptools;
     vimPluginsPaths = lib.pipe _vimPlugins [
       (lib.concatMapStringsSep ",\n" (s: ''"${s}"''))
       # `@...@` is invalid syntax in lua, so inline unquote it when interpolating
@@ -126,6 +131,11 @@ let
 in
 wrapNeovim neovim-unwrapped {
   extraMakeWrapperArgs = ''--prefix PATH : "${lib.makeBinPath buildInputs}"'';
+  # lua deps required by rest-nvim; without them its plugin script errors on startup
+  extraLuaPackages = ps: [
+    ps.xml2lua
+    ps.mimetypes
+  ];
   configure = {
     customRC = ''
       lua << EOF

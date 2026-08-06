@@ -64,10 +64,6 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.lsp.log.set_level("info") -- or "debug"
 
 local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
-for type, icon in pairs(signs) do
-	local hl = "DiagnosticSign" .. type
-	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-end
 vim.diagnostic.config({
 	virtual_lines = true, -- enable for lsp-lines to use
 	virtual_text = false, -- defer to lsp-lines
@@ -292,7 +288,7 @@ require("neo-tree").setup({
 			leave_dirs_open = false,
 		},
 	},
-	buffers = { follow_current_file = { enable = true } },
+	buffers = { follow_current_file = { enabled = true } },
 })
 -- auto close neo-tree if it's the last window in the tab
 vim.api.nvim_create_autocmd("WinClosed", {
@@ -355,16 +351,6 @@ require("gitsigns").setup({
 })
 
 -- dap
-
-local function dirLookup(dir)
-	-- Return first result from find
-	local p = io.popen("find " .. dir .. " -maxdepth 0 -type d | head -n 1")
-	if p ~= nil then
-		for file in p:lines() do
-			return file
-		end
-	end
-end
 
 require("dap-vscode-js").setup({
 	adapters = { "pwa-node", "pwa-chrome", "pwa-msedge", "node-terminal", "pwa-extensionHost" },
@@ -443,8 +429,7 @@ end
 dap.adapters.cppdbg = {
 	id = "cppdbg",
 	type = "executable",
-	command = dirLookup("/nix/store/*vscode-extension-ms-vscode-cpptools*")
-		.. "/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7",
+	command = "@cpptools@/share/vscode/extensions/ms-vscode.cpptools/debugAdapters/bin/OpenDebugAD7",
 }
 
 dap.configurations.cpp = {
@@ -714,7 +699,7 @@ vim.lsp.config("lua_ls", {
 vim.lsp.enable("lua_ls")
 
 vim.lsp.config("cmake", {
-	cmd = { resolve_lsp_cmd("cmake", "@cmake-language-server@/bin/cmake-language-server") },
+	cmd = { resolve_lsp_cmd("cmake-language-server", "@cmake-language-server@/bin/cmake-language-server") },
 	root_markers = { "CMakeLists.txt", "CMakePresets.json", "CTestConfig.cmake", "cmake" },
 })
 vim.lsp.enable("cmake")
@@ -751,20 +736,24 @@ vim.lsp.config("gopls", {
 })
 vim.lsp.enable("gopls")
 
-vim.lsp.config("kotlin-lsp", {
-	cmd = { resolve_lsp_cmd("kotlin-lsp", "@kotlin-lsp@/bin/kotlin-lsp"), "--stdio" },
-	root_markers = { "settings.gradle", "settings.gradle.kts", "build.gradle", "build.gradle.kts", "pom.xml" },
+vim.lsp.config("kotlin_lsp", {
+	cmd = {
+		"@libfaketime@/bin/faketime",
+		"2026-06-04",
+		resolve_lsp_cmd("kotlin-lsp", "@kotlin-lsp@/bin/kotlin-lsp"),
+		"--stdio",
+	},
 })
-vim.lsp.enable("kotlin-lsp")
+vim.lsp.enable("kotlin_lsp")
 
 vim.lsp.config("pyright", {
-	cmd = { resolve_lsp_cmd("pyright", "@pyright@/bin/pyright-langserver"), "--stdio" },
+	cmd = { resolve_lsp_cmd("pyright-langserver", "@pyright@/bin/pyright-langserver"), "--stdio" },
 	root_markers = { "pyrightconfig.json", "pyproject.toml", "setup.py", "setup.cfg", "requirements.txt", "Pipfile" },
 })
 vim.lsp.enable("pyright")
 
 vim.lsp.config("vimls", {
-	cmd = { resolve_lsp_cmd("vimls", "@vim-language-server@/bin/vim-language-server"), "--stdio" },
+	cmd = { resolve_lsp_cmd("vim-language-server", "@vim-language-server@/bin/vim-language-server"), "--stdio" },
 })
 vim.lsp.enable("vimls")
 
@@ -775,7 +764,7 @@ vim.lsp.config("clangd", {
 vim.lsp.enable("clangd")
 
 vim.lsp.config("bashls", {
-	cmd = { resolve_lsp_cmd("bashls", "@bash-language-server@/bin/bash-language-server"), "start" },
+	cmd = { resolve_lsp_cmd("bash-language-server", "@bash-language-server@/bin/bash-language-server"), "start" },
 })
 vim.lsp.enable("bashls")
 
@@ -786,7 +775,6 @@ vim.lsp.enable("bashls")
 -- diagnostics
 vim.api.nvim_set_keymap("n", "<leader>ra", "<cmd>lua vim.diagnostic.reset()<cr>", { noremap = true })
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
-vim.keymap.set("n", "<leader>a", vim.diagnostic.setloclist)
 vim.keymap.set("n", "[e", function()
 	vim.diagnostic.jump({ count = -1 })
 end, { desc = "Go to previous diagnostic" })
@@ -870,7 +858,9 @@ vim.api.nvim_create_user_command("FzfQf", function(opts)
 
 	if cmd == "" then
 		cmd = vim.fn.input("Shell command: ")
-		return
+		if cmd == "" then
+			return
+		end
 	end
 
 	require("fzf-lua").fzf_exec(cmd, {
@@ -977,7 +967,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			"<cmd>lua require('fzf-lua').lsp_code_actions()<cr>",
 			{ noremap = true }
 		)
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
 		vim.keymap.set("n", "<leader>p", function()
 			if client ~= nil and client.server_capabilities.documentFormattingProvider then
 				vim.lsp.buf.format({ async = true })
