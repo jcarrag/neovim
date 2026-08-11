@@ -752,7 +752,22 @@ vim.lsp.config("bashls", {
 })
 vim.lsp.enable("bashls")
 
-vim.lsp.enable("vtsls")
+local function resolve_ts_native_cmd()
+	local tsc = vim.fn.exepath("tsc")
+	if #tsc > 0 then
+		local version = vim.fn.system({ tsc, "--version" })
+		local major = tonumber(version:match("Version (%d+)") or "")
+		if major and major >= 7 then
+			return { tsc, "--lsp", "--stdio" }
+		end
+	end
+	return { resolve_lsp_cmd("tsgo", "@typescript-go@/bin/tsgo"), "--lsp", "--stdio" }
+end
+
+vim.lsp.config("tsgo", {
+	cmd = resolve_ts_native_cmd(),
+})
+vim.lsp.enable("tsgo")
 
 --
 -- Mappings

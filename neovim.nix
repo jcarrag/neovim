@@ -10,7 +10,7 @@
   vscode-langservers-extracted,
   vscode-extensions,
   dockerfile-language-server,
-  vtsls,
+  typescript-go,
   prettier,
   pyright,
   ruff,
@@ -34,7 +34,6 @@ let
   buildInputs = [
     vscode-js-debug
     vscode-extensions.ms-vscode.cpptools
-    vtsls
     prettier
     ruff
     eslint
@@ -117,6 +116,7 @@ let
       bash-language-server
       rust-analyzer
       libfaketime
+      typescript-go
       ;
     cpptools = vscode-extensions.ms-vscode.cpptools;
     vimPluginsPaths = lib.pipe _vimPlugins [
