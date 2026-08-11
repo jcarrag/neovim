@@ -10,7 +10,7 @@
   vscode-langservers-extracted,
   vscode-extensions,
   dockerfile-language-server,
-  typescript-language-server,
+  vtsls,
   prettier,
   pyright,
   ruff,
@@ -34,7 +34,7 @@ let
   buildInputs = [
     vscode-js-debug
     vscode-extensions.ms-vscode.cpptools
-    typescript-language-server
+    vtsls
     prettier
     ruff
     eslint
