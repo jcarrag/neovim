@@ -243,9 +243,6 @@ vim.api.nvim_create_autocmd({ "BufWritePost" }, {
 -- nvim-web-devicons
 require("nvim-web-devicons").setup()
 
--- nvim-colorizer.lua
-require("colorizer").setup()
-
 -- nvim-autopairs
 require("nvim-autopairs").setup()
 
